@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Template • TodoMVC</title>
+  </head>
+
+  <body>
+    <section class="todoapp">
+      <header class="header">
+        <h1>{{ title }}</h1>
+        <input
+          class="new-todo"
+          placeholder="What needs to be done?"
+          autofocus
+          v-model.trim="newTodo"
+          @keyup.enter="addTodo"
+        />
+      </header>
+      
+      <section class="main">
+        <input
+          id="toggle-all"
+          class="toggle-all"
+          type="checkbox"
+          v-model.trim="isAll"
+        />
+        <label for="toggle-all">Mark all as complete</label>
+        <ul class="todo-list">
+     
+          <li
+            v-for="(todo,index) in filteredTodos"
+            v-bind:class="{completed:todo.completed,editing:editedTodo === index}"
+          >
+            <div class="view">
+              <input class="toggle" type="checkbox" v-model="todo.completed" />
+              <label v-on:dblclick="editTodo(todo,index)">{{ todo.content }}</label>
+              <button class="destroy" v-on:click="removeTodo(index)"></button>
+            </div>
+            <input
+              class="edit"
+              v-model="todo.content"
+              v-focus="editedTodo === index"
+              v-on:blur="doneEdit(todo,index)"
+              v-on:keyup.esc="cancleEdit(todo)"
+              v-on:keyup.enter="doneEdit(todo)"
+            />
+          </li>
+        </ul>
+      </section>
+      
+      <footer class="footer" v-show="todos.length">
+
+        <span class="todo-count"
+          ><strong>{{ remain }}</strong> {{todos.length>1?'items':'item'}} left</span
+        >
+       
+        <ul class="filters">
+          <li><a v-bind:class="{selected:hashName === 'all'}" href="#/all">All</a></li>
+          <li><a v-bind:class="{selected:hashName === 'active'}" href="#/active">Active</a></li>
+          <li><a v-bind:class="{selected:hashName === 'completed'}" href="#/completed">Completed</a></li>
+        </ul>
+      
+        <button class="clear-completed" v-on:click='clear()'>Clear completed</button>
+      </footer>
+    </section>
+  </body>
+</html>
